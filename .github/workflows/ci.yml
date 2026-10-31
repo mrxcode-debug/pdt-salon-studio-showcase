@@ -1,0 +1,26 @@
+name: Showcase checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install
+        run: npm ci --no-fund --no-audit
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test:core
+      - name: Build
+        run: npm run build
